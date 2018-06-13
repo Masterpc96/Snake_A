@@ -1,6 +1,5 @@
 package com.example.micha.snake.Levels;
 
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,7 +19,10 @@ public class Entry extends Level {
 
     @Override
     public boolean checkCollision(int x, int y) {
-        if (((x <= 15 || x >= 20) && (y == 0 || y == height - 1)) || ((x == 0 || x == width - 1) && (y <= 10 || y >= 15))) {
+        boolean verticalBorders = ((x==0 || x == width-1) && (y <= 10 || y >= 15));
+        boolean horizontalBorders = (x <= 15 || x >= 20) && (y == 0 || y == height - 1);
+
+        if (verticalBorders || horizontalBorders) {
             return true;
         }
         return false;
@@ -30,17 +32,22 @@ public class Entry extends Level {
     public ArrayList<Line> generateLines(int spaceH, int spaceV, int pix, int screenWidth, int screenHeight) {
         lines.clear();
 
-        lines.add(new Line(spaceH, spaceV + (pix / 2), spaceH + 16 * pix, spaceV + (pix / 2)));
-        lines.add(new Line(spaceH + (16 + 4) * pix, spaceV + (pix / 2), screenWidth - spaceH - 1, spaceV + (pix / 2)));
+        // up
+        lines.add(new Line(spaceH+2, spaceV + (pix / 2), spaceH + 16 * pix, spaceV + (pix / 2)));
+        lines.add(new Line(spaceH + (16 + 4) * pix, spaceV + (pix / 2), screenWidth - spaceH - 3, spaceV + (pix / 2)));
 
-        lines.add(new Line(spaceH, screenHeight - spaceV - (pix / 2), spaceH + 16 * pix, screenHeight - spaceV - (pix / 2)));
-        lines.add(new Line(spaceH + (16 + 4) * pix, screenHeight - spaceV - (pix / 2), screenWidth - spaceH - 1, screenHeight - spaceV - (pix / 2)));
+        //bottom
+        lines.add(new Line(spaceH+2, screenHeight - spaceV - (pix / 2), spaceH + 16 * pix, screenHeight - spaceV - (pix / 2)));
+        lines.add(new Line(spaceH + (16 + 4) * pix, screenHeight - spaceV - (pix / 2), screenWidth - spaceH - 3, screenHeight - spaceV - (pix / 2)));
 
-        lines.add(new Line(spaceH + (pix / 2), spaceV, spaceH + (pix / 2), spaceV + (11 * pix)));
-        lines.add(new Line(spaceH + (pix / 2), spaceV + (15 * pix), spaceH + (pix / 2), screenHeight - spaceV));
+        // left
+        lines.add(new Line(spaceH + (pix / 2), spaceV+2, spaceH + (pix / 2), spaceV + (11 * pix)));
+        lines.add(new Line(spaceH + (pix / 2), spaceV + (15 * pix), spaceH + (pix / 2), screenHeight - spaceV-2));
 
-        lines.add(new Line(screenWidth - spaceH - (pix / 2) - 1, spaceV, screenWidth - spaceH - (pix / 2) - 1, spaceV + (11 * pix)));
-        lines.add(new Line(screenWidth - spaceH - (pix / 2) - 1, spaceV + (15 * pix), screenWidth - spaceH - (pix / 2) - 1, screenHeight - spaceV));
+
+        // right
+        lines.add(new Line(screenWidth - spaceH - (pix / 2) - 1, spaceV+2, screenWidth - spaceH - (pix / 2) - 1, spaceV + (11 * pix)));
+        lines.add(new Line(screenWidth - spaceH - (pix / 2) - 1, spaceV + (15 * pix), screenWidth - spaceH - (pix / 2) - 1, screenHeight - spaceV-2));
         return lines;
     }
 
